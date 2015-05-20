@@ -1,8 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MapGeneratorPlaceholder.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/OutlineListener.cs">
     <Files>
-      <File FileName="Assets/Scripts/MapGeneratorPlaceholder.cs" Line="39" Column="54" />
+      <File FileName="Assets/Scripts/OutlineListener.cs" Line="44" Column="83" />
+      <File FileName="Assets/Scripts/MapGeneratorPlaceholder.cs" Line="28" Column="18" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
