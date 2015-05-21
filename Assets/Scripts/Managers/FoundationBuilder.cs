@@ -5,19 +5,13 @@ public class FoundationBuilder : MonoBehaviour
 {
 	public GameObject wallSpritePrefab;
 	public GameObject floorSpritePrefab;
-	public GameObject foundationHolder;
 	public float tileSize;
 
-	void Awake()
+	public void BuildFoundation(int initPosX, int initPosY, int finalPosX, int finalPosY, GameObject foundationHolder)
 	{
-		foundationHolder = new GameObject("Foundation");
-	}
-
-	public void BuildFoundation(int initPosX, int initPosY, int finalPosX, int finalPosY)
-	{
-		for (int x = initPosX; x <= finalPosX; x++)
+		for (int x = Mathf.Min(initPosX, finalPosX); x <= Mathf.Max(initPosX, finalPosX); x++)
 		{
-			for (int y = initPosY; y <= finalPosY; y++)
+			for (int y = Mathf.Min(initPosY, finalPosY); y <= Mathf.Max(initPosY, finalPosY); y++)
 			{
 				GameObject tile;
 				if (x == initPosX || x == finalPosX || y == initPosY || y == finalPosY)

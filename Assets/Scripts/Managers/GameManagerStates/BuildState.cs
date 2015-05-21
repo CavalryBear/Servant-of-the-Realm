@@ -3,11 +3,12 @@ using System.Collections;
 
 public class BuildState : MonoBehaviour, IGameManagerState
 {
-	public GameObject OutlinePrefab;
-	public GameObject OutlineHolder;
-	public float OutlineTileSize;
-	public GameObject Outline;
-	public bool CreatingOutline;
+	public GameObject outlinePrefab;
+	public GameObject outlineHolder;
+	public FoundationBuilder foundationBuilder;
+	public float outlineTileSize;
+	public GameObject outline;
+	public bool creatingOutline;
 
 	private Vector3 _firstTilePosition;
 	private Vector3 _oldMousePosition;
@@ -17,51 +18,49 @@ public class BuildState : MonoBehaviour, IGameManagerState
 	{
 		_gameManager = gameManager;
 
-		OutlineHolder = new GameObject("OutlineHolder");
+		outlineHolder = new GameObject("OutlineHolder");
 
-		Outline = Instantiate(OutlinePrefab) as GameObject;
-		Outline.transform.SetParent(OutlineHolder.transform);
-		Outline.GetComponent<SpriteRenderer>().color = new Color32(165, 165, 165, 100);
+		outline = Instantiate(outlinePrefab) as GameObject;
+		outline.transform.SetParent(outlineHolder.transform);
+		outline.GetComponent<SpriteRenderer>().color = new Color32(165, 165, 165, 100);
 
-		CreatingOutline = false;
+		creatingOutline = false;
 	}
 
 	public void HandleInput()
 	{
 		Vector3 _newMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		int tilePosX = Mathf.RoundToInt(_newMousePosition.x / OutlineTileSize);
-		int tilePosY = Mathf.RoundToInt(_newMousePosition.y / OutlineTileSize);
+		int tilePosX = Mathf.RoundToInt(_newMousePosition.x / outlineTileSize);
+		int tilePosY = Mathf.RoundToInt(_newMousePosition.y / outlineTileSize);
 		_newMousePosition = new Vector3(tilePosX, tilePosY, 0);
 
 		if (Input.GetMouseButtonDown(0))
 		{
 			Debug.Log("Mouse Left Button Down Detected!");
-			Outline.GetComponent<SpriteRenderer>().color = new Color32(84, 189, 84, 100);
+			outline.GetComponent<SpriteRenderer>().color = new Color32(84, 189, 84, 100);
 			_oldMousePosition = _firstTilePosition = _newMousePosition;
 			Debug.Log("Initial Mouse Position: " + _oldMousePosition.x + ", " + _oldMousePosition.y);
-			CreatingOutline = true;
+			creatingOutline = true;
 		}
-		else if (Input.GetMouseButtonUp(0) && CreatingOutline)
+		else if (Input.GetMouseButtonUp(0) && creatingOutline)
 		{
 			Debug.Log("Mouse Left Button Up Detected!");
-			Outline.GetComponent<SpriteRenderer>().color = new Color32(165, 165, 165, 100);
-			CreatingOutline = false;
-			Outline.transform.localScale = new Vector3(1, 1);
-			Outline.transform.position = new Vector3(tilePosX * OutlineTileSize, tilePosY * OutlineTileSize, 0);
+			foundationBuilder.BuildFoundation((int)_firstTilePosition.x, (int)_firstTilePosition.y, (int)_oldMousePosition.x, (int)_oldMousePosition.y, _gameManager.foundationHolder);
+			_gameManager.ChangeState(_gameManager.manageState);
 		}
-		else if (CreatingOutline)
+		else if (creatingOutline)
 		{
 			if (!_oldMousePosition.Equals(_newMousePosition))
 			{
 				Debug.Log("Creating Outline!");
 				Debug.Log("New Mouse Position: " + _newMousePosition.x + ", " + _newMousePosition.y);
-				float _leftBorder = (Mathf.Min(_firstTilePosition.x, _newMousePosition.x) - 0.5f) * OutlineTileSize;
-				float _bottomBorder = (Mathf.Min(_firstTilePosition.y, _newMousePosition.y) - 0.5f) * OutlineTileSize;
-				float _rightBorder = (Mathf.Max(_firstTilePosition.x, _newMousePosition.x) + 0.5f) * OutlineTileSize;
-				float _topBorder = (Mathf.Max(_firstTilePosition.y, _newMousePosition.y) + 0.5f) * OutlineTileSize;
+				float _leftBorder = (Mathf.Min(_firstTilePosition.x, _newMousePosition.x) - 0.5f) * outlineTileSize;
+				float _bottomBorder = (Mathf.Min(_firstTilePosition.y, _newMousePosition.y) - 0.5f) * outlineTileSize;
+				float _rightBorder = (Mathf.Max(_firstTilePosition.x, _newMousePosition.x) + 0.5f) * outlineTileSize;
+				float _topBorder = (Mathf.Max(_firstTilePosition.y, _newMousePosition.y) + 0.5f) * outlineTileSize;
 				
-				Outline.transform.position = new Vector3((_rightBorder + _leftBorder) / 2, (_topBorder + _bottomBorder) / 2);
-				Outline.transform.localScale = new Vector3((_rightBorder - _leftBorder) / OutlineTileSize, (_topBorder - _bottomBorder) / OutlineTileSize);
+				outline.transform.position = new Vector3((_rightBorder + _leftBorder) / 2, (_topBorder + _bottomBorder) / 2);
+				outline.transform.localScale = new Vector3((_rightBorder - _leftBorder) / outlineTileSize, (_topBorder - _bottomBorder) / outlineTileSize);
 				
 				_oldMousePosition = _newMousePosition;
 			}
@@ -72,13 +71,13 @@ public class BuildState : MonoBehaviour, IGameManagerState
 		}
 		else
 		{
-			Outline.transform.position = new Vector3(tilePosX * OutlineTileSize, tilePosY * OutlineTileSize, 0);
+			outline.transform.position = new Vector3(tilePosX * outlineTileSize, tilePosY * outlineTileSize, 0);
 		}
 	}
 
 	public void Exit()
 	{
-		CreatingOutline = false;
-		DestroyObject(OutlineHolder);
+		creatingOutline = false;
+		DestroyObject(outlineHolder);
 	}
 }

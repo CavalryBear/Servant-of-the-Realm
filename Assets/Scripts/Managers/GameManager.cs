@@ -3,22 +3,19 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-	public FoundationBuilder foundationBuilder;
-
 	public BuildState buildState;
 	public ManageState manageState;
 	
 	public IGameManagerState GameState;
-	
+
+	public GameObject foundationHolder;
 
 	private Vector3 _oldMousePosition;
 	
 	void Start ()
 	{
 		GameState = manageState;
-		ChangeState(buildState);
-
-		foundationBuilder.BuildFoundation(-2, -2, 2, 2);
+		foundationHolder = new GameObject("Foundation");
 	}
 
 	void Update ()
