@@ -47,9 +47,12 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\CameraControls.cs" />
+     <Compile Include="Assets\Scripts\Managers\FoundationBuilder.cs" />
      <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
      <Compile Include="Assets\Scripts\Managers\GameManagerStates\BuildState.cs" />
      <Compile Include="Assets\Scripts\Managers\GameManagerStates\GameManagerState.cs" />
+     <Compile Include="Assets\Scripts\Managers\GameManagerStates\ManageState.cs" />
+     <Compile Include="Assets\Scripts\Managers\HUDManager.cs" />
      <Compile Include="Assets\Scripts\MapGeneratorPlaceholder.cs" />
      <Compile Include="Assets\Scripts\Models\Room.cs" />
      <Compile Include="Assets\Scripts\Models\Tavern.cs" />
