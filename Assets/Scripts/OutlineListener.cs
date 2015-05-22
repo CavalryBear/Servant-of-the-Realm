@@ -38,7 +38,7 @@ public class OutlineListener : MonoBehaviour
 		int tilePosY = Mathf.RoundToInt(_newMousePosition.y / tileSize);
 		_newMousePosition = new Vector3(tilePosX, tilePosY, 0);
 
-		if (Input.GetMouseButtonDown(0))
+		if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
 		{
 			Debug.Log("Mouse Left Button Down Detected!");
 			roomOutline.GetComponent<SpriteRenderer>().color = new Color32(84, 189, 84, 100);

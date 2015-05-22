@@ -20,10 +20,7 @@ public class GameManager : MonoBehaviour
 
 	void Update ()
 	{
-		if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
-		{
-			handleInput();
-		}
+		handleInput();
 	}
 
 	private void handleInput()
@@ -31,10 +28,10 @@ public class GameManager : MonoBehaviour
 		GameState.HandleInput();
 	}
 
-	public void ChangeState(IGameManagerState state)
+	public void ChangeState(IGameManagerState state, int operationCode)
 	{
 		GameState.Exit();
 		GameState = state;
-		GameState.Enter(this);
+		GameState.Enter(this, operationCode);
 	}
 }

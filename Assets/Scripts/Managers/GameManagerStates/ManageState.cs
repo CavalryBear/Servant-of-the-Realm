@@ -5,7 +5,7 @@ public class ManageState : MonoBehaviour, IGameManagerState
 {
 	private GameManager _gameManager;
 
-	public void Enter(GameManager gameManager)
+	public void Enter(GameManager gameManager, int operationCode)
 	{
 		_gameManager = gameManager;
 	}

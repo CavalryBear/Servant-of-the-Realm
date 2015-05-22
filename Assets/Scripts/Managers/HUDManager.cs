@@ -9,8 +9,8 @@ public class HUDManager : MonoBehaviour
 	{
 		switch (buttonIndex)
 		{
-		case 0:
-			gameManager.ChangeState(gameManager.buildState);
+		case 0: case 1: case 2:
+			gameManager.ChangeState(gameManager.buildState, buttonIndex);
 			break;
 		}
 	}

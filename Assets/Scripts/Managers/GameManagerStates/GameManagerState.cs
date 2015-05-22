@@ -3,7 +3,7 @@ using System.Collections;
 
 public interface IGameManagerState
 {
-	void Enter(GameManager gameManager);
+	void Enter(GameManager gameManager, int operationCode);
 
 	void HandleInput();
 
