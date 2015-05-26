@@ -11,14 +11,14 @@ public class HUDManager : MonoBehaviour
 	{
 		switch (buttonIndex)
 		{
-		case 0: case 1: case 2:
+		case 0: case 11: case 12: case 21: case 22:
 			gameManager.ChangeState(gameManager.buildState, buttonIndex);
 			break;
-		case 100:
+		case 10:
 			floorsMenu.SetActive(false);
 			wallsMenu.SetActive(!wallsMenu.activeSelf);
 			break;
-		case 101:
+		case 20:
 			wallsMenu.SetActive(false);
 			floorsMenu.SetActive(!floorsMenu.activeSelf);
 			break;

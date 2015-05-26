@@ -1,14 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CameraControls.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Managers/GameManager/GameManagerStates/BuildState.cs">
     <Files>
-      <File FileName="Assets/Scripts/Managers/GameManager.cs" Line="35" Column="38" />
-      <File FileName="Assets/Scripts/Managers/GameManagerStates/GameManagerState.cs" Line="6" Column="55" />
-      <File FileName="Assets/Scripts/CameraControls.cs" Line="23" Column="3" />
-      <File FileName="Assets/Scripts/Managers/GameManagerStates/BuildState.cs" Line="30" Column="6" />
-      <File FileName="Assets/Scripts/Managers/GameManagerStates/ManageState.cs" Line="8" Column="62" />
-      <File FileName="Assets/Scripts/Managers/HUDManager.cs" Line="13" Column="63" />
-      <File FileName="Assets/Scripts/Managers/TavernBuilder.cs" Line="40" Column="33" />
+      <File FileName="Assets/Scripts/Managers/GameManager/GameManager.cs" Line="33" Column="3" />
+      <File FileName="Assets/Scripts/CameraControls.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Managers/GameManager/GameManagerStates/BuildState.cs" Line="128" Column="5" />
+      <File FileName="Assets/Scripts/MapTile.cs" Line="5" Column="2" />
+      <File FileName="Assets/Scripts/Managers/HUDManager/HUDManager.cs" Line="14" Column="46" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
