@@ -23,9 +23,10 @@ public class BuildState : MonoBehaviour, IGameManagerState
 	public GameObject wallSpritePrefab;
 	public GameObject floorSpritePrefab;
 
-	private Vector3 _firstTilePosition;
-	private Vector3 _oldMousePosition;
+	private Vector2 _firstTilePosition;
+	private Vector2 _oldTilePosition;
 	private GameManager _gameManager;
+	private MapManager _mapManager;
 
 	private bool _axisDefined;
 	private bool _isHorizontal;
@@ -37,17 +38,19 @@ public class BuildState : MonoBehaviour, IGameManagerState
 	/// <param name="operationCode">OperationCode</param>
 	public void Enter(GameManager gameManager, int operationCode)
 	{
-		Vector3 _newMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		int tilePosX = Mathf.RoundToInt(_newMousePosition.x / outlineTileSize);
-		int tilePosY = Mathf.RoundToInt(_newMousePosition.y / outlineTileSize);
-		_newMousePosition = new Vector3(tilePosX, tilePosY, 0);
-
 		_gameManager = gameManager;
+		_mapManager = gameManager.mapManager;
 		operation = (Operation)operationCode;
+
+		Vector3 _newMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		Vector2 _tileCoordinates = _mapManager.GetTileCoordinates(_newMousePosition.x, _newMousePosition.y);
+//		int tilePosX = Mathf.RoundToInt((_newMousePosition.x - _gameManager.mapStartingX) / _gameManager.tileSize);
+//		int tilePosY = Mathf.RoundToInt((_gameManager.mapStartingY - _newMousePosition.y) / _gameManager.tileSize);
+//		_newMousePosition = new Vector3(tilePosX, tilePosY, 0);
 
 		outlineHolder = new GameObject("OutlineHolder");
 
-		outline = Instantiate(outlinePrefab, new Vector3(tilePosX * outlineTileSize, tilePosY * outlineTileSize, 0), Quaternion.identity) as GameObject;
+		outline = Instantiate(outlinePrefab, _mapManager.GetWorldCoordinates((int)_tileCoordinates.x, (int)_tileCoordinates.y), Quaternion.identity) as GameObject;
 		outline.transform.SetParent(outlineHolder.transform);
 		outline.GetComponent<SpriteRenderer>().color = new Color32(165, 165, 165, 100);
 
@@ -61,14 +64,13 @@ public class BuildState : MonoBehaviour, IGameManagerState
 	public void HandleInput()
 	{
 		Vector3 _newMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		int tilePosX = Mathf.RoundToInt(_newMousePosition.x / outlineTileSize);
-		int tilePosY = Mathf.RoundToInt(_newMousePosition.y / outlineTileSize);
-		_newMousePosition = new Vector3(tilePosX, tilePosY, 0);
+		Vector2 _tileCoordinates = _mapManager.GetTileCoordinates(_newMousePosition.x, _newMousePosition.y);
 
 		if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
 		{
+			Vector2 tile = _mapManager.GetTileCoordinates(_newMousePosition.x, _newMousePosition.y);
 			outline.GetComponent<SpriteRenderer>().color = new Color32(84, 189, 84, 100);
-			_oldMousePosition = _firstTilePosition = _newMousePosition;
+			_oldTilePosition = _firstTilePosition = _tileCoordinates;
 			creatingOutline = true;
 		}
 		else if (Input.GetMouseButtonUp(0) && creatingOutline)
@@ -76,21 +78,21 @@ public class BuildState : MonoBehaviour, IGameManagerState
 			switch (operation)
 			{
 			case Operation.BuildFoundation:
-				tavernBuilder.BuildFoundation((int)_firstTilePosition.x, (int)_firstTilePosition.y, (int)_oldMousePosition.x, (int)_oldMousePosition.y, _gameManager.foundationHolder);
+				tavernBuilder.BuildFoundation((int)_firstTilePosition.x, (int)_firstTilePosition.y, (int)_oldTilePosition.x, (int)_oldTilePosition.y, _mapManager);
 				break;
 
 			case Operation.BuildWall:
 				if (_isHorizontal)
 				{
-					tavernBuilder.BuildObject(wallSpritePrefab, (int)_firstTilePosition.x, (int)_firstTilePosition.y, (int)_oldMousePosition.x, (int)_firstTilePosition.y, _gameManager.foundationHolder);
+					tavernBuilder.BuildArea(wallSpritePrefab, "Wall", (int)_firstTilePosition.x, (int)_firstTilePosition.y, (int)_oldTilePosition.x, (int)_firstTilePosition.y, _mapManager);
 				}
 				else
 				{
-					tavernBuilder.BuildObject(wallSpritePrefab, (int)_firstTilePosition.x, (int)_firstTilePosition.y, (int)_firstTilePosition.x, (int)_oldMousePosition.y, _gameManager.foundationHolder);
+					tavernBuilder.BuildArea(wallSpritePrefab, "Wall", (int)_firstTilePosition.x, (int)_firstTilePosition.y, (int)_firstTilePosition.x, (int)_oldTilePosition.y, _mapManager);
 				}
 				break;
 			case Operation.BuildFloor:
-				tavernBuilder.BuildObject(floorSpritePrefab, (int)_firstTilePosition.x, (int)_firstTilePosition.y, (int)_oldMousePosition.x, (int)_oldMousePosition.y, _gameManager.foundationHolder);
+				tavernBuilder.BuildArea(floorSpritePrefab, "Floor", (int)_firstTilePosition.x, (int)_firstTilePosition.y, (int)_oldTilePosition.x, (int)_oldTilePosition.y, _mapManager);
 				break;
 			}
 
@@ -109,17 +111,17 @@ public class BuildState : MonoBehaviour, IGameManagerState
 		}
 		else if (creatingOutline)
 		{
-			if (!_oldMousePosition.Equals(_newMousePosition))
+			if (!_oldTilePosition.Equals(_tileCoordinates))
 			{
 				float _leftBorder, _bottomBorder, _topBorder, _rightBorder;
 
 				switch (operation)
 				{
 				case Operation.BuildFoundation: case Operation.BuildFloor:
-					_leftBorder = (Mathf.Min(_firstTilePosition.x, _newMousePosition.x) - 0.5f) * outlineTileSize;
-					_bottomBorder = (Mathf.Min(_firstTilePosition.y, _newMousePosition.y) - 0.5f) * outlineTileSize;
-					_rightBorder = (Mathf.Max(_firstTilePosition.x, _newMousePosition.x) + 0.5f) * outlineTileSize;
-					_topBorder = (Mathf.Max(_firstTilePosition.y, _newMousePosition.y) + 0.5f) * outlineTileSize;
+					_leftBorder = _gameManager.mapStartingX + (Mathf.Min(_firstTilePosition.x, _tileCoordinates.x) - 0.5f) * outlineTileSize;
+					_bottomBorder = _gameManager.mapStartingY - (Mathf.Min(_firstTilePosition.y, _tileCoordinates.y) - 0.5f) * outlineTileSize;
+					_rightBorder = _gameManager.mapStartingX + (Mathf.Max(_firstTilePosition.x, _tileCoordinates.x) + 0.5f) * outlineTileSize;
+					_topBorder = _gameManager.mapStartingY - (Mathf.Max(_firstTilePosition.y, _tileCoordinates.y) + 0.5f) * outlineTileSize;
 					
 					outline.transform.position = new Vector3((_rightBorder + _leftBorder) / 2, (_topBorder + _bottomBorder) / 2);
 					outline.transform.localScale = new Vector3((_rightBorder - _leftBorder) / outlineTileSize, (_topBorder - _bottomBorder) / outlineTileSize);
@@ -129,24 +131,22 @@ public class BuildState : MonoBehaviour, IGameManagerState
 					if (!_axisDefined)
 					{
 						_axisDefined = true;
-						_isHorizontal = (Mathf.Abs(_newMousePosition.x - _firstTilePosition.x) >= Mathf.Abs(_newMousePosition.y - _firstTilePosition.y));
+						_isHorizontal = (Mathf.Abs(_tileCoordinates.x - _firstTilePosition.x) >= Mathf.Abs(_firstTilePosition.y - _tileCoordinates.y));
 					}
-					
-
 					
 					if (_isHorizontal)
 					{
-						_leftBorder = (Mathf.Min(_firstTilePosition.x, _newMousePosition.x) - 0.5f) * outlineTileSize;
-						_bottomBorder = (_firstTilePosition.y - 0.5f) * outlineTileSize;
-						_topBorder = (_firstTilePosition.y + 0.5f) * outlineTileSize;
-						_rightBorder = (Mathf.Max(_firstTilePosition.x, _newMousePosition.x) + 0.5f) * outlineTileSize;
+						_leftBorder = _gameManager.mapStartingX + (Mathf.Min(_firstTilePosition.x, _tileCoordinates.x) - 0.5f) * outlineTileSize;
+						_bottomBorder = _gameManager.mapStartingY - (_firstTilePosition.y - 0.5f) * outlineTileSize;
+						_topBorder = _gameManager.mapStartingY - (_firstTilePosition.y + 0.5f) * outlineTileSize;
+						_rightBorder = _gameManager.mapStartingX + (Mathf.Max(_firstTilePosition.x, _tileCoordinates.x) + 0.5f) * outlineTileSize;
 					}
 					else
 					{
-						_leftBorder = (_firstTilePosition.x - 0.5f) * outlineTileSize;
-						_rightBorder = (_firstTilePosition.x + 0.5f) * outlineTileSize;
-						_bottomBorder = (Mathf.Min(_firstTilePosition.y, _newMousePosition.y) - 0.5f) * outlineTileSize;
-						_topBorder = (Mathf.Max(_firstTilePosition.y, _newMousePosition.y) + 0.5f) * outlineTileSize;
+						_leftBorder = _gameManager.mapStartingX + (_firstTilePosition.x - 0.5f) * outlineTileSize;
+						_rightBorder = _gameManager.mapStartingX + (_firstTilePosition.x + 0.5f) * outlineTileSize;
+						_bottomBorder = _gameManager.mapStartingY - (Mathf.Min(_firstTilePosition.y, _tileCoordinates.y) - 0.5f) * outlineTileSize;
+						_topBorder = _gameManager.mapStartingY - (Mathf.Max(_firstTilePosition.y, _tileCoordinates.y) + 0.5f) * outlineTileSize;
 					}
 					
 					outline.transform.position = new Vector3((_rightBorder + _leftBorder) / 2, (_topBorder + _bottomBorder) / 2);
@@ -154,12 +154,12 @@ public class BuildState : MonoBehaviour, IGameManagerState
 					break;
 				}
 
-				_oldMousePosition = _newMousePosition;
+				_oldTilePosition = _tileCoordinates;
 			}
 		}
 		else
 		{
-			outline.transform.position = new Vector3(tilePosX * outlineTileSize, tilePosY * outlineTileSize, 0);
+			outline.transform.position = _mapManager.GetWorldCoordinates((int)_tileCoordinates.x, (int)_tileCoordinates.y);
 		}
 	}
 
