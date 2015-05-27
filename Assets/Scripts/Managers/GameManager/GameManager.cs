@@ -3,12 +3,7 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-	public float mapStartingX;
-	public float mapStartingY;
-	public int mapWidth;
-	public int mapHeight;
-	public float tileSize;
-	public GameObject baseMapTile;
+	public MapTile baseMapTile;
 	public MapManager mapManager;
 
 	public BuildState buildState;
@@ -22,14 +17,19 @@ public class GameManager : MonoBehaviour
 	{
 		GameState = manageState;
 
-		mapStartingX = mapWidth % 2 == 0 ? -tileSize * mapWidth / 2 : (-tileSize * (mapWidth - 1) - tileSize) / 2;
-		mapStartingY = mapHeight % 2 == 0 ? tileSize * mapHeight / 2 : (tileSize * (mapHeight - 1) + tileSize) / 2;
-		mapManager.GenerateMap(mapStartingX, mapStartingY, mapWidth, mapHeight, tileSize, baseMapTile);
+		generateMap();
 	}
 
 	void Update ()
 	{
 		handleInput();
+	}
+
+	private void generateMap()
+	{
+		mapManager = Instantiate(mapManager);
+		mapManager.name = "Map";
+		mapManager.GenerateMap(baseMapTile);
 	}
 
 	private void handleInput()

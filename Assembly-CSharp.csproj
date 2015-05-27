@@ -54,12 +54,14 @@
      <Compile Include="Assets\Scripts\Managers\GameManager\GameManagerStates\ManageState.cs" />
      <Compile Include="Assets\Scripts\Managers\HUDManager\HUDManager.cs" />
      <Compile Include="Assets\Scripts\Managers\MapManager\MapManager.cs" />
+     <Compile Include="Assets\Scripts\Managers\MapManager\Outline.cs" />
+     <Compile Include="Assets\Scripts\Managers\MapManager\OutlineManager.cs" />
      <Compile Include="Assets\Scripts\Managers\MapManager\TavernBuilder.cs" />
+     <Compile Include="Assets\Scripts\Managers\MapManager\TileLayer.cs" />
      <Compile Include="Assets\Scripts\MapGeneratorPlaceholder.cs" />
      <Compile Include="Assets\Scripts\MapTile.cs" />
      <Compile Include="Assets\Scripts\Models\Room.cs" />
      <Compile Include="Assets\Scripts\Models\Tavern.cs" />
-     <Compile Include="Assets\Scripts\RoomOutline.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
