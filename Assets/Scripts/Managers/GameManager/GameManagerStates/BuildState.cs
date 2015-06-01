@@ -13,7 +13,6 @@ using System.Collections;
 public class BuildState : MonoBehaviour, IGameManagerState
 {
 	public TavernBuilder tavernBuilder;
-	public bool creatingOutline;
 	public Operation operation;
 
 	public GameObject wall1SpritePrefab;
@@ -74,7 +73,6 @@ public class BuildState : MonoBehaviour, IGameManagerState
 		//outline.transform.SetParent(outlineHolder.transform);
 		//outline.GetComponent<SpriteRenderer>().color = new Color32(165, 165, 165, 100);
 
-		creatingOutline = false;
 		_axisDefined = false;
 	}
 
@@ -95,9 +93,40 @@ public class BuildState : MonoBehaviour, IGameManagerState
 //			//_oldTilePosition = _firstTilePosition = _tileCoordinates;
 //			creatingOutline = true;
 		}
+		else if (Input.GetMouseButtonDown(1))
+		{
+			if (Input.GetMouseButton(0))
+			{
+				_gameManager.ChangeState(_gameManager.buildState, _operationCode);
+			}
+			else
+			{
+				_gameManager.ChangeState(_gameManager.manageState, 0);
+			}
+		}
+		else if (Input.GetMouseButtonUp(0) && _mapManager.creatingOutline)
+		{
+			switch (operation)
+			{
+			case Operation.BuildFoundation:
+				//tavernBuilder.BuildFoundation((int)_mapManager.outline.firstSelectedTile.x, (int)_mapManager.outline.firstSelectedTile.y, )
+				break;
+
+			case Operation.BuildWall:
+				break;
+
+			case Operation.BuildFloor:
+				break;
+			}
+
+			_gameManager.ChangeState(_gameManager.buildState, _operationCode);
+		}
+		else if (_mapManager.creatingOutline)
+		{
+			_mapManager.StretchOutline(operation == Operation.BuildWall ? false : true, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+		}
 		else
 		{
-			//			outline.transform.position = _mapManager.GetWorldCoordinates((int)_tileCoordinates.x, (int)_tileCoordinates.y);
 			_mapManager.outlinePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 		}
 //		else if (Input.GetMouseButtonUp(0) && creatingOutline)
@@ -125,16 +154,6 @@ public class BuildState : MonoBehaviour, IGameManagerState
 //
 //			_gameManager.ChangeState(_gameManager.buildState, _operationCode);
 //		}
-//		else if (Input.GetMouseButtonDown(1))
-//		{
-//			if (Input.GetMouseButton(0))
-//			{
-//				_gameManager.ChangeState(_gameManager.buildState, _operationCode);
-//			}
-//			else
-//			{
-//				_gameManager.ChangeState(_gameManager.manageState, 0);
-//			}
 //		}
 //		else if (creatingOutline)
 //		{
@@ -192,7 +211,7 @@ public class BuildState : MonoBehaviour, IGameManagerState
 	/// </summary>
 	public void Exit()
 	{
-//		creatingOutline = false;
+		_mapManager.DeactivateOutline();
 		//DestroyObject(outlineHolder);
 	}
 

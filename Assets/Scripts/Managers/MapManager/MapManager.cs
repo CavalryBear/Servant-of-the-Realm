@@ -75,18 +75,45 @@ public class MapManager : MonoBehaviour
 		outline.Unselect();
 	}
 
+	public void DeactivateOutline()
+	{
+		outline.Unselect();
+		outline.gameObject.SetActive(false);
+	}
+
 	public void SelectOutline()
 	{
 		outline.Select();
+	}
+
+	public void StretchOutline(bool area, Vector3 mousePosition)
+	{
+//		float leftBorder, topBorder, rightBorder, bottomBorder;
+
+//		if (area)
+//		{
+//			leftBorder = mapStartingX + (Mathf.Min(outline.firstSelectedTile.x, outline.currentTile.x) - 0.5f) * tileSize;
+//			bottomBorder = mapStartingY - (Mathf.Min(outline.firstSelectedTile.y, outline.currentTile.y) - 0.5f) * tileSize;
+//			rightBorder = mapStartingX + (Mathf.Max(outline.firstSelectedTile.x, outline.currentTile.x) + 0.5f) * tileSize;
+//			topBorder = mapStartingY - (Mathf.Max(outline.firstSelectedTile.y, outline.currentTile.y) + 0.5f) * tileSize;
+//		}
+
+
+		outline.Stretch(GetTileCoordinates(Layers.Floor, mousePosition.x, mousePosition.y), area, tileSize);
 	}
 
 	public Vector3 outlinePosition
 	{
 		set
 		{
-			outline.currentTile = GetTileCoordinates(Layers.Floor, value.x, value.y);
+			outline.SetTile(GetTileCoordinates(Layers.Floor, value.x, value.y));
 			outline.transform.position = GetWorldCoordinates(Layers.Floor, (int)outline.currentTile.x, (int)outline.currentTile.y);
 		}
+	}
+
+	public bool creatingOutline
+	{
+		get { return outline.creatingOutline; }
 	}
 
 	public enum Layers

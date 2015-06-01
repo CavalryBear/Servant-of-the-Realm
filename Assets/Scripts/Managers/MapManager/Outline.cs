@@ -20,6 +20,27 @@ public class Outline : MonoBehaviour
 	
 	public void Unselect()
 	{
+		creatingOutline = false;
 		GetComponent<SpriteRenderer>().color = passiveColor;
+	}
+
+	public void SetTile(Vector2 newTilePosition)
+	{
+		_oldTilePosition = currentTile;
+		currentTile = newTilePosition;
+	}
+
+	public void Stretch(Vector2 newTilePosition, bool area, float tileSize)
+	{
+		if (!_oldTilePosition.Equals(newTilePosition))
+		{
+			if (area)
+			{
+
+			}
+		}
+
+		transform.position = new Vector3((rightBorder + leftBorder) / 2, (topBorder + bottomBorder) / 2);
+		transform.localScale = new Vector3((rightBorder - leftBorder) / tileSize, (topBorder - bottomBorder) / tileSize);
 	}
 }
