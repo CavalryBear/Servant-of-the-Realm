@@ -1,12 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Managers/MapManager/MapManager.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Managers/GameManager/GameManagerStates/BuildState.cs">
     <Files>
-      <File FileName="Assets/Scripts/Managers/GameManager/GameManagerStates/BuildState.cs" Line="127" Column="4" />
-      <File FileName="Assets/Scripts/Managers/MapManager/MapManager.cs" Line="85" Column="3" />
+      <File FileName="Assets/Scripts/Managers/MapManager/MapManager.cs" Line="78" Column="20" />
       <File FileName="Assets/Scripts/Managers/HUDManager/HUDManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Managers/MapManager/Outline.cs" Line="39" Column="5" />
-      <File FileName="Assets/Scripts/Managers/MapManager/TileLayer.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Managers/GameManager/GameManagerStates/BuildState.cs" Line="102" Column="4" />
+      <File FileName="Assets/Scripts/Managers/MapManager/OutlineManager.cs" Line="11" Column="3" />
+      <File FileName="Assets/Scripts/Managers/MapManager/Outline.cs" Line="8" Column="24" />
+      <File FileName="Assets/Scripts/Managers/MapManager/TileLayer.cs" Line="21" Column="37" />
       <File FileName="Assets/Scripts/Managers/GameManager/GameManager.cs" Line="42" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
